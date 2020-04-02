@@ -3,15 +3,42 @@
     <meta charset="utf-8">
     <title>Representative Spending</title>
     <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Antic+Didone&family=Sen&display=swap" rel="stylesheet">
+  <!-- Cartographic data from https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.2017.html -->
+<!-- Representative info from https://github.com/unitedstates/congress-legislators -->
   </head>
   <body>
-    <h1>Template for Exploratory Project</h1>
-    <div id="hover-content"></div><br>
-    <div id="d3-container"></div>
+    <div id="readme"><h1>The 115th Congress & You: Where Did Your Tax Dollars Go?</h1>
+    <p class="expl">The 115th Congress met from January 2017 to January 2019. Use the filters below to find out how they spent their budgets; scroll in on the map to zoom into a section of it, and click a district you're interested in to see the representative and their spending.<br>
+    Data from <a href="https://projects.propublica.org/represent/expenditures">ProPublica</a></p></div>
+<div id="dashboard">
+    <div id="filters">
+      <div id="year">
+        <!-- <button class="y2017">2017</button>
+        <button class="y2018">2018</button>
+        <button class="y2019">2019</button> -->
+      </div>
+      <br><br>
+      <div id="category">
+        <label for="dropdown" class="label">Category</label>
+        <select id="dropdown" class="category" name="dropdown"></select>
+      </div>
+      <br>
+      <div id="purpose">
+        <label for="dropdown" class="label">Purpose</label>
+      <select id="dropdown" class="purpose" name="dropdown"></select>
+      </div>
+    </div>
+    <div id="map">
+      <div id="hover-content"></div>
+    </div>
+    <div id="infopanel"></div>
+    <div id="donut"></div>
+    <div id="scatterplot"></div>
+  </div>
     <!-- <script src="../lib/d3.js"></script> -->
-    <!-- Addition to test out github pages load fail-->
     <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="index.js"></script>
+    <script src="index.js" type="module"></script>
     <script src="https://d3js.org/d3-array.v1.min.js"></script>
 <script src="https://d3js.org/d3-geo.v1.min.js"></script>
   </body>
