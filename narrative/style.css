@@ -1,0 +1,24 @@
+body {
+  font-family: "Roboto 300", sans-serif;
+  margin-left: 50px;
+}
+
+a {
+  text-decoration: none;
+  color: gray;
+}
+
+h1 {
+  font-family: "Oswald 500", sans-serif;
+  font-size: 61px;
+}
+
+.container {
+  display: grid;
+  place-items: center;
+}
+
+.label {
+  font-size: 10px;
+  color: white;
+}

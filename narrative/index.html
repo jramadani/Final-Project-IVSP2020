@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <title>Traveling on the People's Dime</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500&family=Roboto:wght@300&display=swap" rel="stylesheet">
+<!-- Representative info from https://github.com/unitedstates/congress-legislators -->
+  </head>
+  <body>
+    <h1>Representation on Wheels (WIP title)</h1>
+    <p style="font-size: 36px;">Our representatives are spending a large proportion of their budget on travel.</h2>
+    <p class="expl">Data from <a href="https://projects.propublica.org/represent/expenditures">ProPublica</a></p></div>
+    <div class="container">
+      <div><p style="font-size: 24px; padding-bottom: 15px;">
+        Of the categories on which representatives spend their budgets, personnel compensation and travel are the top two overall. <br><br>
+        When taking into account that each representative has a certain amount of staffers and contractors, each paid a large amount yearly,
+        the next most interesting category becomes travel. <br><br>So what are our representatives spending all that travel money on?
+      </p></div>
+      <div></div>
+      <div id="treemap"></div>
+      <div><p style="font-size: 24px; padding-bottom: 15px;">
+        The top 10 travel spenders are largely from red states, but surprisingly, a fair amount of Democrats are also big travel spenders.
+        <br> <br> This mostly comes down to location.
+      </p></div>
+      <div id="hbc"></div>
+      <div><p style="font-size: 24px; padding-bottom: 15px;">You might be wondering, though: what exactly are these representatives spending all that money on? 
+        The top answer is gas mileage reimbursement, which makes sense given that many of the top spenders are from large states like Texas.
+      But then there are expenditures like meals and hotels. </div>
+      <div id="sunburst"></div>
+      <div><p style="font-size: 24px; padding-bottom: 15px;">
+      You could make the argument that if being a member of Congress is like being hired at a company, but for the most part, oversight is limited. 
+      We the people, as voting HR, don't actually have the ability to fire our representatives.</p>
+      <div><p style="font-size: 24px; padding-bottom: 15px;">But looking at it further, there's a time for traveling, too: our representatives aren't just traveling to connect with their constituents. 
+        </p></div>
+     <div style="padding: 50px"><p>TEMPORARY PLACEHOLDER FOR THE CALENDAR HEATMAP</p></div>
+      <div id="calendar"></div>
+      <div><p style="font-size: 24px; padding-bottom: 15px;">Our representatives are campaigning on tax funds, perpetuating the cycle of incumbency--in other words, it's way more likely they'll get voted into office again.<br>
+       <br> While this can be a good thing or a bad thing, depending on your perspective and how much you like your representative, one thing's for sure: it's not really fair.</p></div>
+      <div><p style="font-size: 24px; padding-bottom: 15px;">If you want to know more about how the 115th Congress spent their budget, 
+        <a href="">take a look at the Representative Spending dashboard.</a></p></div>
+    </div>
+    <!-- <script src="../lib/d3.js"></script> -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="index.js" type="module"></script>
+    <script src="https://d3js.org/d3-array.v2.min.js"></script>
+    <script src="https://d3js.org/d3-time.v1.min.js"></script>
+<script src="https://d3js.org/d3-time-format.v2.min.js"></script>
+<script src="moment.js"></script>
+  </body>
+</html>
