@@ -13,13 +13,46 @@ class Treemap {
   }
 
   draw(state, setGlobalState) {
-    const colorScale = d3.scaleOrdinal(d3.schemeSet3);
     let data = state.spending;
+
+    //below from office hours, modified for use in all four graphs
+
+    const milliSecondsPerDay = 1000 * 60 * 60 * 24;
+    const formatter = d3.timeFormat("%m/%d/%y");
+    const parser = d3.timeParse("%m/%d/%y");
+    const yearFormatter = d3.timeFormat("%Y");
+    const yearParser = d3.timeParse("%Y");
+    let newData = state.spending.map((d) => ({
+      ...d,
+      normalized_amount:
+        d.AMOUNT /
+        Math.max(
+          1, // can't be less than 1 day
+          (parser(d["END DATE"]) - parser(d["START DATE"])) / milliSecondsPerDay
+        ),
+    }));
+    let filteredData = newData.filter(
+      (d) =>
+        d["START DATE"] &&
+        yearFormatter(yearParser(d.YEAR)) ==
+          yearFormatter(parser(d["START DATE"]))
+    );
+
+    //normalized data ends here; begin nesting
+
     const nestedData = d3
       .nest()
       .key((d) => d.CATEGORY)
       .rollup((d) => d3.sum(d, (d) => d.AMOUNT))
-      .entries(data);
+      .entries(filteredData);
+
+    console.log("nestedData", nestedData);
+
+    // const colorMap = d3.scaleOrdinal(
+    //   d3.quantize(d3.interpolateTurbo, nestedData)
+    // );
+
+    const colorMap = d3.scaleSequential(d3.interpolatePlasma);
 
     let wrapper = { children: nestedData };
 
@@ -45,10 +78,13 @@ class Treemap {
     leaf
       .append("rect")
       .attr("stroke", "black")
-      .attr("fill", (d) => {
-        const maxSum = d.ancestors().find((d) => d.value);
-        return colorScale();
-      })
+      .attr(
+        "fill",
+        "transparent"
+        // d=> {
+        //     const valueScale =
+        // }
+      )
       .attr("width", (d) => d.x1 - d.x0)
       .attr("height", (d) => d.y1 - d.y0);
   }

@@ -7,41 +7,46 @@ class HBarchart {
 
   draw(state, setGlobalState) {
     //BAR CHART
+    let data = state.spending;
 
-    //DATA AGGREGATION
-    let traveldata = state.spending.filter((d) => d.CATEGORY == "TRAVEL");
+    //DATA MANIPS FROM OFFICE HRS
+
+    const milliSecondsPerDay = 1000 * 60 * 60 * 24;
+    const formatter = d3.timeFormat("%m/%d/%y");
+    const parser = d3.timeParse("%m/%d/%y");
+    const yearFormatter = d3.timeFormat("%Y");
+    const yearParser = d3.timeParse("%Y");
+    const numToInclude = 10;
+
+    let newData = data.map((d) => ({
+      ...d,
+      normalized_amount:
+        d.AMOUNT /
+        Math.max(
+          1, // can't be less than 1 day
+          (parser(d["END DATE"]) - parser(d["START DATE"])) / milliSecondsPerDay
+        ),
+    }));
+
+    let filteredData = newData.filter(
+      (d) =>
+        d["START DATE"] &&
+        yearFormatter(yearParser(d.YEAR)) ==
+          yearFormatter(parser(d["START DATE"])) &&
+        d["CATEGORY"] === "TRAVEL"
+    );
 
     const nestedData = d3
       .nest()
       .key((d) => d.BIOGUIDE_ID)
       .rollup((d) => d3.sum(d, (d) => d.AMOUNT))
-      .entries(traveldata);
-
-    console.log("data", nestedData);
-
-    //   let sumData = d3.sum((d) => d.value);
-
-    //   const data = {
-    //     children: originalData.map(item => ({value: item}))
-    // };
+      .entries(filteredData);
 
     let topData = nestedData
       .sort(function (a, b) {
         return d3.descending(+a.value, +b.value);
       })
       .slice(0, 10);
-
-    console.log("testing", topData);
-
-    // topData.forEach((d) => d.key);
-
-    // let namesMap = {
-    //   children: topData.map((d) => (d.key = state.reps.bioguide_id)),
-    // };
-
-    // console.log("reps", namesMap);
-
-    // let finalData = topData.find((d) => d.key == state.reps.bioguide_id);
 
     //SCALES
     const yScale = d3
