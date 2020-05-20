@@ -1,9 +1,9 @@
 import { Map } from "./map.js";
 import { InfoPanel } from "./infopanel.js";
 import { Donut } from "./donut.js";
-import { Scatterplot } from "./scatterplot.js";
+import { Timescale } from "./timescale.js";
 
-let map, infopanel, donut, scatterplot;
+let map, infopanel, donut, timescale;
 
 let state = {
   districts: [],
@@ -15,13 +15,13 @@ let state = {
   hover: null,
   selectedYear: null,
   selectedCategory: null,
-  selectedPurpose: null
+  yearFiltered: [],
 };
 
 Promise.all([
   d3.json("../data/cb_2017_us_cd115_5m.json", d3.autoType),
   d3.csv("../data/repinfo.csv", d3.autoType),
-  d3.csv("../data/spendingdatafinal.csv", d3.autoType)
+  d3.csv("../data/spendingdatafinal.csv", d3.autoType),
 ]).then(([districts, reps, spending]) => {
   state.districts = districts;
   state.reps = reps;
@@ -34,7 +34,7 @@ function init() {
   map = new Map(state, setGlobal);
   infopanel = new InfoPanel(state, setGlobal);
   donut = new Donut(state, setGlobal);
-  scatterplot = new Scatterplot(state, setGlobal);
+  timescale = new Timescale(state, setGlobal);
   draw();
 }
 
@@ -42,7 +42,7 @@ function draw() {
   map.draw(state, setGlobal);
   infopanel.draw(state, setGlobal);
   donut.draw(state, setGlobal);
-  scatterplot.draw(state, setGlobal);
+  timescale.draw(state, setGlobal);
 }
 
 function setGlobal(nextState) {

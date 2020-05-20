@@ -3,6 +3,7 @@
     <meta charset="utf-8">
     <title>Representative Spending</title>
     <link rel="stylesheet" href="./style.css">
+    <link href="../resources/css/all.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Antic+Didone&family=Sen&display=swap" rel="stylesheet">
   <!-- Cartographic data from https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.2017.html -->
 <!-- Representative info from https://github.com/unitedstates/congress-legislators -->
@@ -24,22 +25,20 @@
         <select id="dropdown" class="category" name="dropdown"></select>
       </div>
       <br>
-      <div id="purpose">
-        <label for="dropdown" class="label">Purpose</label>
-      <select id="dropdown" class="purpose" name="dropdown"></select>
-      </div>
+    <div id="summarystats">
+    </div>
     </div>
     <div id="map">
       <div id="hover-content"></div>
     </div>
     <div id="infopanel"></div>
     <div id="donut"></div>
-    <div id="scatterplot"></div>
+    <div id="timescale"></div>
   </div>
     <!-- <script src="../lib/d3.js"></script> -->
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="index.js" type="module"></script>
-    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+    <script src="https://d3js.org/d3-array.v2.min.js"></script>
 <script src="https://d3js.org/d3-geo.v1.min.js"></script>
   </body>
 </html>

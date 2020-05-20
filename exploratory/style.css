@@ -63,7 +63,7 @@ button {
   margin: 15px;
 }
 
-#purpose {
+#reps {
   display: flex;
   flex-direction: column;
   padding: 20px;
@@ -79,7 +79,7 @@ button {
 }
 
 .district:hover {
-  fill: black;
+  fill: green;
 }
 
 #hover-content {
@@ -89,6 +89,10 @@ button {
 #infopanel {
   grid-column: 4/5;
   grid-row: 1;
+  padding-top: 50px;
+  padding-left: 50px;
+  margin-top: 50px;
+  margin-left: 50px;
 }
 
 #donut {
@@ -101,6 +105,10 @@ button {
   grid-column: 4;
   grid-row: 2;
   height: 350px;
+}
+
+path {
+  shape-rendering: geometricPrecision;
 }
 
 .republican {

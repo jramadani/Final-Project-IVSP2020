@@ -5,52 +5,33 @@ class InfoPanel {
   draw(state, setGlobal) {
     console.log("here is the infopanel");
 
-    //when map registers a click, grabbing a geoid, then we should match that geoid to state.reps
-
-    //MAIN REP FILTER -- CURRENTLY NOT WORKING
-    const filteredData = state.reps.map(d => state.geoid === d.geoid);
+    //MAIN REP FILTER
+    const filteredReps = state.reps.find((d) => state.rep == d.bioguide_id);
+    console.log(filteredReps);
 
     //WORKING FILTERS
-    const yearFinder = [
-      ...Array.from(new Set(state.spending.map(d => d.YEAR)))
-    ];
-    const categorySelection = [
-      ...Array.from(new Set(state.spending.map(d => d.CATEGORY)))
-    ];
-    const purposeSelection = [
-      ...Array.from(new Set(state.spending.map(d => d.PURPOSE)))
-    ];
+    const yearFinder = Array.from(new Set(state.spending.map((d) => d.YEAR)));
+    const categorySelection = Array.from(
+      new Set(state.spending.map((d) => d.CATEGORY))
+    );
+    const repSelection = Array.from(
+      new Set(state.reps.map((d) => d.last_name))
+    );
 
     //FILLING THE FILTERS
 
     // CATEGORY
-    this.cat = d3.select(".category").on("change", function() {
+    this.cat = d3.select(".category").on("change", function () {
       console.log("new selection is", this.value);
-      state.selectedCategory = this.value;
-      draw();
+      setGlobal({ selectedCategory: (state.selectedCategory = this.value) });
     });
 
     const categor = this.cat
       .selectAll("option")
       .data(categorySelection)
       .join("option")
-      .attr("value", d => d)
-      .text(d => d);
-
-    //PURPOSE -- will probably not use this one
-
-    this.pur = d3.select(".purpose").on("change", function() {
-      console.log("new selection is", this.value);
-      state.selectedPurpose = this.value;
-      draw();
-    });
-
-    const purpose = this.pur
-      .selectAll("option")
-      .data(purposeSelection)
-      .join("option")
-      .attr("value", d => d)
-      .text(d => d);
+      .attr("value", (d) => d)
+      .text((d) => d);
 
     //YEAR BUTTONS
 
@@ -60,30 +41,43 @@ class InfoPanel {
       .selectAll("button")
       .data(yearFinder)
       .join("button")
-      .text(d => d)
+      .attr("value", (d) => d)
+      .text((d) => d)
       .attr("color", "white")
-      .on("click", d => setGlobal({ selectedYear: d.YEAR }));
+      .on("click", function () {
+        console.log("new selection is", this.value);
+        setGlobal({
+          selectedYear: this.value,
+          yearFiltered: state.spending.filter((d) => this.value == d.YEAR),
+        });
+      });
 
-    // if (state.rep) {
-    //   container
-    //     .html(
-    // <div>Hon. ${state.rep.full_name}</div>
-    //     <div>${state.rep.party}</div>
-    //     <div>${state.rep.facebook}</div>
-    //     <div>${state.rep.twitter}</div>
-    //     <div>${state.rep.youtube_id}</div>
-    //     <div>${state.rep.url}</div>
-    //     <div>${state.rep.contact_form}</div>
-    //     <div>${state.rep.address}</div>
-    //     <div>${state.rep.phone</div>`
-    //     )
-    //     .transition()
-    //     .duration(500)
-    //     .style("background-color", "white")
-    //     .style("color", "#A50026")
-    //     .style("border-radius", "15px")
-    //     .style("padding", "15px")
-    //     .style("opacity", 0.85)
+    this.container
+      .selectAll(".info")
+      .data(filteredReps)
+      .join("div", (d) => {
+        if (state.rep) {
+          this.container
+            .html(
+              `<div>Hon. ${filteredReps.full_name} | ${filteredReps.party}</div><br>
+                <div><i class="fab fa-facebook-f"></i> ${filteredReps.facebook}</div>
+                <div><i class="fab fa-twitter"></i> @${filteredReps.twitter}</div>
+                <div><a href="https://youtube.com/${filteredReps.youtube_id}"><i class="fab fa-youtube"></i> YouTube</a></div>
+                <div><i class="fas fa-link"></i> ${filteredReps.url}</div>
+                <div><i class="fas fa-envelope"></i> ${filteredReps.contact_form}</div><br>
+                <div><i class="fas fa-map-marker-alt"></i> ${filteredReps.address}</div>
+                <div><i class="fas fa-phone-alt"></i> ${filteredReps.phone}</div>`
+            )
+            .style("background-color", "white")
+            .style("color", "green")
+            .style("border-radius", "15px")
+            .style("padding", "15px")
+            .style("padding-top", "75px")
+            .transition()
+            .duration(1000)
+            .style("opacity", 0.85);
+        }
+      });
   }
 }
 

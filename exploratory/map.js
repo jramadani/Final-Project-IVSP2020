@@ -35,43 +35,48 @@ class Map {
       //   state.hover = { geoid: d.properties.GEOID };
       //   console.log("geoid", state.hover.geoid);
       // })
-      .on("click", d => {
-        setGlobal({ geoid: d.properties.GEOID });
+      .on("click", (district) => {
+        const geoid = district.properties.GEOID;
+        const rep = state.reps.find((rep) => rep.geoid == geoid);
+        setGlobal({
+          geoid: geoid,
+          rep: rep.bioguide_id,
+        });
       })
       .call(
-        d3.zoom().on("zoom", d => {
+        d3.zoom().on("zoom", (d) => {
           this.svg.selectAll("path").attr("transform", d3.event.transform);
         })
-      )
-      .on("mouseover", d => {
-        state.hover = {
-          translate: [d.x, d.y]
-        };
-        draw();
-      });
+      );
+
+    // .on("mouseover", d => {
+    //   state.hover = {
+    //     translate: [d.x, d.y]
+    //   };
+    // });
   }
 
   draw(state, setGlobal) {
     console.log("map time!!");
 
     //tooltip
-    if (state.hover) {
-      tooltip
-        .html(
-          `<div>Total amount spent on ${selectedCategory}: $placeholder </div>`
-        )
-        .transition()
-        .duration(500)
-        .style("background-color", "white")
-        .style("color", "#A50026")
-        .style("border-radius", "15px")
-        .style("padding", "15px")
-        .style("opacity", 0.85)
-        .style(
-          "transform",
-          `translate(${state.hover.translate[0]}px, ${state.hover.translate[1]}px)`
-        );
-    }
+    // if (state.hover) {
+    //   tooltip
+    //     .html(
+    //       `<div>Total amount spent on ${selectedCategory}: $placeholder </div>`
+    //     )
+    //     .transition()
+    //     .duration(500)
+    //     .style("background-color", "white")
+    //     .style("color", "#A50026")
+    //     .style("border-radius", "15px")
+    //     .style("padding", "15px")
+    //     .style("opacity", 0.85)
+    //     .style(
+    //       "transform",
+    //       `translate(${state.hover.translate[0]}px, ${state.hover.translate[1]}px)`
+    //     );
+    // }
   }
 }
 
