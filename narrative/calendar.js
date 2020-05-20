@@ -1,8 +1,8 @@
 class Calendar {
   constructor(state, setGlobalState) {
-    let widthOverall = window.innerWidth * 0.8;
-    let heightOverall = window.innerHeight * 0.8;
-    let margin = { top: 20, bottom: 50, left: 60, right: 40 };
+    this.widthOverall = window.innerWidth * 0.8;
+    this.heightOverall = window.innerHeight * 0.8;
+    this.margin = { top: 20, bottom: 50, left: 60, right: 40 };
   }
 
   draw(state, setGlobalState) {
@@ -28,6 +28,7 @@ class Calendar {
     const numToInclude = 10;
 
     let data = state.caldata;
+    // data = data.filter(d=> )
     console.log("data", data);
 
     let wrapper = data.map(function (years) {
@@ -77,12 +78,15 @@ class Calendar {
     let svg = container
       .append("svg")
       .attr("width", this.widthOverall)
-      .attr("height", this.heightOverall)
+      .attr("height", this.heightOverall * 3)
       .attr("font-family", "sans-serif")
       .attr("font-size", 10);
 
-    const year = svg.selectAll("g").data(wrapper).join("g");
-    // .attr("transform", `translate(40.5, ${})`);
+    const year = svg
+      .selectAll("g")
+      .data(wrapper)
+      .join("g")
+      .attr("transform", (d, i) => `translate(0, ${height * i})`);
 
     // year
     //   .append("text")
@@ -106,15 +110,9 @@ class Calendar {
 
     year
       .append("g")
+      .attr("class", "dates")
       .selectAll("rect")
-      .data(
-        // (d) => {
-        // for (const i in wrapper) {
-        //   return d.dates;
-        // }
-        wrapper[1].dates
-        // }
-      )
+      .data((d) => d.dates)
       .join("rect")
       .attr("width", cellSize - 1)
       .attr("height", cellSize - 1)
@@ -123,8 +121,9 @@ class Calendar {
         (d) => timeWeek.count(d3.utcYear(d.date), d.date) * cellSize + 0.5
       )
       .attr("y", (d) => countDay(d.date) * cellSize + 0.5)
-      .attr("stroke", "black")
-      .attr("fill", "white")
+      .attr("stroke", "white")
+      .attr("fill", "red")
+      .attr("padding", "5px")
       .append("title")
       .text(
         (d) => `${formatDate(d.date)}
@@ -133,12 +132,10 @@ class Calendar {
 
     const month = year
       .append("g")
+      .attr("class", "months")
       .selectAll("g")
-      .data(([, values]) =>
-        d3.utcMonths(
-          d3.utcMonth(values[0].date),
-          values[values.length - 1].date
-        )
+      .data(([, dates]) =>
+        d3.utcMonths(d3.utcMonth(dates[0].date), dates[dates.length - 1].date)
       )
       .join("g");
 

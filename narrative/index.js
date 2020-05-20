@@ -31,18 +31,18 @@ Promise.all([
 
 //INIT FUNCTION
 function init() {
-  // treemap = new Treemap(state, setGlobalState);
-  // hbarchart = new HBarchart(state, setGlobalState);
-  // sunburst = new Sunburst(state, setGlobalState);
+  treemap = new Treemap(state, setGlobalState);
+  hbarchart = new HBarchart(state, setGlobalState);
+  sunburst = new Sunburst(state, setGlobalState);
   calendar = new Calendar(state, setGlobalState);
   draw();
 }
 
 //DRAW FUNCTION
 function draw() {
-  // treemap.draw(state, setGlobalState);
-  // hbarchart.draw(state, setGlobalState);
-  // sunburst.draw(state, setGlobalState);
+  treemap.draw(state, setGlobalState);
+  hbarchart.draw(state, setGlobalState);
+  sunburst.draw(state, setGlobalState);
   calendar.draw(state, setGlobalState);
 }
 

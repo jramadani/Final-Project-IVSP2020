@@ -8,8 +8,8 @@ class Sunburst {
 
     this.svg = container
       .append("svg")
-      .attr("width", this.width)
-      .attr("height", this.height * 1.25);
+      .attr("width", this.width / 2)
+      .attr("height", this.width / 2);
   }
 
   draw(state, setGlobalState) {
@@ -147,7 +147,7 @@ class Sunburst {
       .selectAll("path")
       .data(root.descendants().filter((d) => d.depth < 3))
       .join("path")
-      // .attr("transform", "scale(0.5)")
+      .attr("transform", `translate(${radius / 2}, ${radius / 2})`)
       .attr("fill", (d) => {
         if (d.height == 2) {
           //this is the Category level
@@ -161,7 +161,7 @@ class Sunburst {
       })
       .attr("d", arc)
       .append("title")
-      .text((d) => d.descendants().filter((d) => d.depth))
+      .text((d) => d.descendants().filter((d) => d.depth < 3))
       .attr("color", "black");
 
     this.svg
@@ -186,7 +186,8 @@ class Sunburst {
       })
       .attr("color", "black")
       .attr("dy", "0.35em")
-      .text((d) => d.data.name);
+      .text((d) => d.data.name)
+      .attr("z-index", "999999");
     //remember to set the title's z-index to 9999 to make sure it shows up on top of everything else.
   }
 }

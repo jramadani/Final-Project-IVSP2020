@@ -52,7 +52,12 @@ class Treemap {
     //   d3.quantize(d3.interpolateTurbo, nestedData)
     // );
 
-    const colorMap = d3.scaleSequential(d3.interpolatePlasma);
+    let scale = d3
+      .scaleLinear()
+      .domain(d3.extent(nestedData, (d) => d.value))
+      .range([0.25, 1]);
+
+    let color = d3.scaleSequential((d) => d3.interpolateGreens(scale(d)));
 
     let wrapper = { children: nestedData };
 
@@ -60,6 +65,7 @@ class Treemap {
       .hierarchy(wrapper)
       .sum((d) => d.value)
       .sort((a, b) => b.value - a.value);
+    console.log("root", root);
 
     let tree = d3
       .treemap()
@@ -77,14 +83,8 @@ class Treemap {
 
     leaf
       .append("rect")
-      .attr("stroke", "black")
-      .attr(
-        "fill",
-        "transparent"
-        // d=> {
-        //     const valueScale =
-        // }
-      )
+      .attr("stroke", "white")
+      .attr("fill", (d) => color(d.data.value))
       .attr("width", (d) => d.x1 - d.x0)
       .attr("height", (d) => d.y1 - d.y0);
   }
