@@ -1,7 +1,7 @@
 class Calendar {
   constructor(state, setGlobalState) {
     this.widthOverall = window.innerWidth * 0.8;
-    this.heightOverall = window.innerHeight * 0.8;
+    this.heightOverall = window.innerHeight * 0.3;
     this.margin = { top: 20, bottom: 50, left: 60, right: 40 };
   }
 
@@ -28,7 +28,7 @@ class Calendar {
     const numToInclude = 10;
 
     let data = state.caldata;
-    // data = data.filter(d=> )
+
     console.log("data", data);
 
     let wrapper = data.map(function (years) {
@@ -56,6 +56,8 @@ class Calendar {
     });
     console.log("wrapper", wrapper);
 
+    wrapper[0].dates.splice([86], 1);
+
     //pathMonth function -- does the work of creating each month.
 
     function pathMonth(t) {
@@ -77,6 +79,7 @@ class Calendar {
 
     let svg = container
       .append("svg")
+      .attr("class", "calendarsvg")
       .attr("width", this.widthOverall)
       .attr("height", this.heightOverall * 3)
       .attr("font-family", "sans-serif")
@@ -88,25 +91,25 @@ class Calendar {
       .join("g")
       .attr("transform", (d, i) => `translate(0, ${height * i})`);
 
-    // year
-    //   .append("text")
-    //   .attr("x", -5)
-    //   .attr("y", -5)
-    //   .attr("font-weight", "bold")
-    //   .attr("text-anchor", "end")
-    //   .text((d) => d);
+    year
+      .append("text")
+      .attr("x", -5)
+      .attr("y", -5)
+      .attr("font-weight", "bold")
+      .attr("text-anchor", "end")
+      .text((d) => d);
 
-    // year
-    //   .append("g")
-    //   .attr("text-anchor", "end")
-    //   .selectAll("text")
-    //   .data(d3.range(7).map((i) => new Date(1995, 0, i)))
-    //   .join("text")
-    //   .attr("x", -5)
-    //   .attr("y", (d) => (countDay(d) + 0.5) * cellSize)
-    //   .attr("dy", "0.31em")
-    //   .text(formatDay)
-    //   .attr("color", "black");
+    year
+      .append("g")
+      .attr("text-anchor", "end")
+      .selectAll("text")
+      .data(d3.range(7).map((i) => new Date(1995, 0, i)))
+      .join("text")
+      .attr("x", -5)
+      .attr("y", (d) => (countDay(d) + 0.5) * cellSize)
+      .attr("dy", "0.31em")
+      .text(formatDay)
+      .attr("color", "black");
 
     year
       .append("g")
@@ -130,31 +133,31 @@ class Calendar {
         `
       );
 
-    const month = year
-      .append("g")
-      .attr("class", "months")
-      .selectAll("g")
-      .data(([, dates]) =>
-        d3.utcMonths(d3.utcMonth(dates[0].date), dates[dates.length - 1].date)
-      )
-      .join("g");
+    // const month = year
+    //   .append("g")
+    //   .attr("class", "months")
+    //   .selectAll("g")
+    //   .data(([, dates]) =>
+    //     d3.utcMonths(d3.utcMonth(dates[0].date), dates[dates.length - 1].date)
+    //   )
+    //   .join("g");
 
-    month
-      .filter((d, i) => i)
-      .append("path")
-      .attr("fill", "none")
-      .attr("stroke", "#fff")
-      .attr("stroke-width", 3)
-      .attr("d", pathMonth);
+    // month
+    //   .filter((d, i) => i)
+    //   .append("path")
+    //   .attr("fill", "none")
+    //   .attr("stroke", "#fff")
+    //   .attr("stroke-width", 3)
+    //   .attr("d", pathMonth);
 
-    month
-      .append("text")
-      .attr(
-        "x",
-        (d) => timeWeek.count(d3.utcYear(d), timeWeek.ceil(d)) * cellSize + 2
-      )
-      .attr("y", -5)
-      .text(formatMonth);
+    // month
+    //   .append("text")
+    //   .attr(
+    //     "x",
+    //     (d) => timeWeek.count(d3.utcYear(d), timeWeek.ceil(d)) * cellSize + 2
+    //   )
+    //   .attr("y", -5)
+    //   .text(formatMonth);
   }
 }
 export { Calendar };

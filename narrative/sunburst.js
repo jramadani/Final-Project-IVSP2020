@@ -66,62 +66,7 @@ class Sunburst {
       .hierarchy([null, grouped], (d) => d[1])
       .sum((d) => d["AMOUNT"]);
 
-    console.log("hierarchy", hierarchy);
-    //NEST APPROACH
-
-    // const nestedData = {
-    //   key: "outer-layer",
-    //   values: d3
-    //     .nest()
-    //     .key((d) => d.BIOGUIDE_ID)
-    //     .key((d) => d.PURPOSE)
-    //     .rollup((d) => d3.sum(d, (d) => d.AMOUNT))
-    //     .entries(traveldata),
-    // };
-
-    // console.log("hier", nestedData);
-
-    // let wrapper = {
-    //   name: "outer-layer",
-    //   children: nestedData.values.map(function (reps) {
-    //     return {
-    //       name: reps.key,
-    //       children: reps.values.map(function (purpose) {
-    //         return {
-    //           name: purpose.key,
-    //           value: purpose.value,
-    //         };
-    //       }),
-    //     };
-    //   }),
-    // };
-
-    // console.log("wrapper", wrapper);
-
-    //END NEST APPROACH
-
-    let color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow));
-
-    // let hierData = d3
-    //   .hierarchy(wrapper)
-    //   .sum((d) => d.value)
-    //   .sort((a, b) => b.value - a.value);
-    // console.log("hierdata", hierData);
-
-    // let slicedData = hierData.children.slice(0, 10);
-    // console.log("slicedData", slicedData);
-
-    // let data = { children: slicedData };
-
     let radius = this.width / 2;
-
-    // let partition = (data) =>
-    //   d3.partition().size([2 * Math.PI, radius])(
-    //     d3
-    //       .hierarchy(data)
-    //       .sum((d) => d.value)
-    //       .sort((a, b) => b.value - a.value)
-    //   );
 
     let partition = (data) =>
       d3.partition().size([2 * Math.PI, radius])(hierarchy);
@@ -131,6 +76,19 @@ class Sunburst {
     let root = partition(topSpenders);
 
     console.log("root", root);
+
+    let scale = d3
+      .scaleLinear()
+      .domain(
+        d3.extent(
+          root.descendants().filter((d) => d.depth < 3),
+          (d) => d.value
+        )
+      )
+      .range([0.25, 1]);
+
+    let colorOuter = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow));
+    let colorInner = d3.scaleSequential((d) => d3.interpolateGreens(scale(d)));
 
     let arc = d3
       .arc()
@@ -147,47 +105,50 @@ class Sunburst {
       .selectAll("path")
       .data(root.descendants().filter((d) => d.depth < 3))
       .join("path")
+      .attr("class", "sunburstControls")
       .attr("transform", `translate(${radius / 2}, ${radius / 2})`)
       .attr("fill", (d) => {
         if (d.height == 2) {
-          //this is the Category level
-          return color(Math.max((d) => d.value));
+          //this is the representative's travel spending level
+          return "green";
+          // color(Math.max((d) => d3.sum(d, (d) => d.value)));
         } else if (d.height == 1) {
-          //this is the Purpose level
-          return color(Math.max((d) => d.value)); //a certain color map based on value, remember to set opacity level at less than 1
+          //this is the purpose level
+          return "pink";
+          // color(Math.max((d) => d3.sum(d, (d) => d.value))); //a certain color map based on value, remember to set opacity level at less than 1
         } else {
           return "transparent";
         }
       })
       .attr("d", arc)
       .append("title")
-      .text((d) => d.descendants().filter((d) => d.depth < 3))
-      .attr("color", "black");
+      .text((d) => d.data[0])
+      .on("mouseover", (d) => d);
 
-    this.svg
-      .append("g")
-      .attr("pointer-events", "none")
-      .attr("text-anchor", "middle")
-      .attr("font-size", 10)
-      .attr("font-family", "sans-serif")
-      .selectAll("text")
-      .data(
-        root
-          .descendants()
-          .filter((d) => d.depth && ((d.y0 + d.y1) / 2) * (d.x1 - d.x0) > 10)
-      )
-      .join("text")
-      .attr("transform", function (d) {
-        const x = (((d.x0 + d.x1) / 2) * 180) / Math.PI;
-        const y = (d.y0 + d.y1) / 2;
-        return `rotate(${
-          x - 90
-        }) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
-      })
-      .attr("color", "black")
-      .attr("dy", "0.35em")
-      .text((d) => d.data.name)
-      .attr("z-index", "999999");
+    //keep everything below in the draw function; move everything above to the constructor
+
+    // this.svg
+    //   .append("g")
+    //   .attr("pointer-events", "none")
+    //   .attr("text-anchor", "middle")
+    //   .attr("font-size", 10)
+    //   .attr("font-family", "sans-serif")
+    //   .selectAll("text")
+    //   .data(
+    //     root.descendants().filter((d) => d.depth < 3)
+    //   )
+    //   .join("text")
+    //   .attr("transform", function (d) {
+    //     const x = (((d.x0 + d.x1) / 2) * 180) / Math.PI;
+    //     const y = (d.y0 + d.y1) / 2;
+    //     return `rotate(${
+    //       x - 90
+    //     }) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
+    //   })
+    //   .attr("color", "black")
+    //   .attr("dy", "0.35em")
+    //   .text((d) => d.data[0])
+    //   .attr("z-index", "9999");
     //remember to set the title's z-index to 9999 to make sure it shows up on top of everything else.
   }
 }

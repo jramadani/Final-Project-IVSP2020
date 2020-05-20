@@ -22,3 +22,12 @@ h1 {
   font-size: 10px;
   color: white;
 }
+
+.calendarsvg {
+  display: grid;
+  place-items: center;
+}
+
+.sunburstControls:hover {
+  fill-opacity: 0.9;
+}

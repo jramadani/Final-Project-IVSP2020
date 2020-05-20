@@ -113,52 +113,6 @@ class Donut {
         (update) => update,
         (exit) => exit.remove()
       );
-
-    // function toolTipHTML(data) {
-    //   var tip = "",
-    //     i = 0;
-
-    //   for (var key in d.data) {
-    //     // if value is a number, format it as a percentage
-    //     var value = !isNaN(parseFloat(d.data[key]))
-    //       ? percentFormat(d.data[key])
-    //       : data.data[key];
-
-    //     // leave off 'dy' attr for first tspan so the 'dy' attr on text element works. The 'dy' attr on
-    //     // tspan effectively imitates a line break.
-    //     if (i === 0) tip += '<tspan x="0">' + key + ": " + value + "</tspan>";
-    //     else
-    //       tip += '<tspan x="0" dy="1.2em">' + key + ": " + value + "</tspan>";
-    //     i++;
-    //   }
-
-    //   return tip;
-    // }
-
-    // function toolTip(selection) {
-    //   // add tooltip (svg circle element) when mouse enters label or slice
-    //   selection.on("mouseenter", function (data) {
-    //     svg
-    //       .append("text")
-    //       .attr("class", "toolCircle")
-    //       .attr("dy", -15) // hard-coded. can adjust this to adjust text vertical alignment in tooltip
-    //       .html(toolTipHTML(data)) // add text to the circle.
-    //       .style("font-size", ".7em")
-    //       .style("text-anchor", "middle"); // centres text in tooltip
-
-    //     svg
-    //       .append("circle")
-    //       .attr("class", "toolCircle")
-    //       .attr("r", radius * 0.55) // radius of tooltip circle
-    //       .style("fill", colour(d.data[category])) // colour based on category mouse is over
-    //       .style("fill-opacity", 0.35);
-    //   });
-
-    //   // remove the tooltip when mouse leaves the slice/label
-    //   selection.on("mouseout", function () {
-    //     d3.selectAll(".toolCircle").remove();
-    //   });
-    // }
   }
 }
 export { Donut };
