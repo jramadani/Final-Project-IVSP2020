@@ -85,21 +85,27 @@ class Treemap {
       .attr("width", (d) => d.x1 - d.x0)
       .attr("height", (d) => d.y1 - d.y0);
 
-    leaf
+    this.svg
+      .selectAll("text")
+      .data(root.leaves())
+      .enter()
       .append("text")
-      .selectAll("tspan")
-      .data((d) =>
-        d.data.key.split("/(?=[A-Z][a-z])|s+/g").concat(format(d.data.value))
-      )
-      .join("tspan")
-      .attr("pointer-events", "none")
-      .attr("text-anchor", "middle")
-      .attr("font-size", 10)
-      .attr("class", "title")
-      // .attr("x", (d) => (d.x1 - d.x0) / 5)
-      // .attr("y", (d) => (d.y1 - d.y0) / 2)
-      .attr("fill", "white")
-      .text((d) => d);
+      .attr("x", (d) => d.x0 + 5)
+      .attr("y", (d) => d.y0 + 20)
+      .text((d) => d.data.key)
+      .attr("font-size", "12px")
+      .attr("fill", "white");
+
+    this.svg
+      .selectAll("values")
+      .data(root.leaves())
+      .enter()
+      .append("text")
+      .attr("x", (d) => d.x0 + 5)
+      .attr("y", (d) => d.y0 + 35)
+      .text((d) => format(Number(Math.round(d.data.value + "e2") + "e-2")))
+      .attr("font-size", "10px")
+      .attr("fill", "white");
   }
 }
 
