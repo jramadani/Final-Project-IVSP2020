@@ -81,13 +81,15 @@ class Sunburst {
     let scale = d3
       .scaleLinear()
       .domain(d3.extent(subset, (d) => d.value))
-      .range([0.5, 1]);
+      .range(["#0fcf9a", "#0a8664"]);
 
     // let colorOuter = d3.scaleOrdinal(
     //   d3.quantize(d3.interpolateSpectral(scale(d)))
     // );
     let colorOuter = d3.scaleOrdinal(d3.quantize(d3.interpolateViridis, 8));
-    let colorInner = d3.scaleSequential((d) => d3.interpolateGreens(scale(d)));
+    let colorInner = d3.scaleSequential((d) => scale(d));
+
+    //d3.scaleSequential((d) => d3.interpolateGreens(scale(d)));
 
     let arc = d3
       .arc()
@@ -122,10 +124,12 @@ class Sunburst {
       })
       .attr("fill-opacity", (d) => {
         if (d.height == 1) {
-          //this is the representative's travel spending level
-          // return "green";
-          return colorInner(d.value);
-          // color(Math.max((d) => d3.sum(d, (d) => d.value)));
+          // let opacityScale = d3
+          //   .scaleLinear()
+          //   .domain([d3.extent(d, (d) => d.value)])
+          //   .range([0.3, 0.8]);
+          // return opacityScale(d.value);
+          return 0.6;
         } else {
           return 1;
         }
