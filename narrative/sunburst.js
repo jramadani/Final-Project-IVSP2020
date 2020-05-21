@@ -75,19 +75,18 @@ class Sunburst {
 
     let root = partition(topSpenders);
 
-    console.log("root", root);
+    let subset = root.descendants().filter((d) => d.depth < 3);
+    console.log("subset", subset);
 
     let scale = d3
       .scaleLinear()
-      .domain(
-        d3.extent(
-          root.descendants().filter((d) => d.depth < 3),
-          (d) => d.value
-        )
-      )
-      .range([0.25, 1]);
+      .domain(d3.extent(subset, (d) => d.value))
+      .range([0, 1]);
 
-    let colorOuter = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow));
+    // let colorOuter = d3.scaleOrdinal(
+    //   d3.quantize(d3.interpolateSpectral(scale(d)))
+    // );
+    let colorOuter = d3.scaleOrdinal(d3.quantize(d3.interpolateViridis, 8));
     let colorInner = d3.scaleSequential((d) => d3.interpolateGreens(scale(d)));
 
     let arc = d3
@@ -101,23 +100,34 @@ class Sunburst {
 
     this.svg
       .append("g")
-      .attr("fill-opacity", 0.6)
       .selectAll("path")
-      .data(root.descendants().filter((d) => d.depth < 3))
+      .data(subset)
       .join("path")
       .attr("class", "sunburstControls")
       .attr("transform", `translate(${radius / 2}, ${radius / 2})`)
       .attr("fill", (d) => {
         if (d.height == 2) {
           //this is the representative's travel spending level
-          return "green";
+          // return "green";
+          return colorInner(d.value);
           // color(Math.max((d) => d3.sum(d, (d) => d.value)));
         } else if (d.height == 1) {
           //this is the purpose level
-          return "pink";
+          return colorOuter(d.data[0]);
+          // return "pink";
           // color(Math.max((d) => d3.sum(d, (d) => d.value))); //a certain color map based on value, remember to set opacity level at less than 1
         } else {
           return "transparent";
+        }
+      })
+      .attr("fill-opacity", (d) => {
+        if (d.height == 1) {
+          //this is the representative's travel spending level
+          // return "green";
+          return colorInner(d.value);
+          // color(Math.max((d) => d3.sum(d, (d) => d.value)));
+        } else {
+          return 1;
         }
       })
       .attr("d", arc)

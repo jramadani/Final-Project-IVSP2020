@@ -1,6 +1,6 @@
 class Calendar {
   constructor(state, setGlobalState) {
-    this.widthOverall = window.innerWidth * 0.8;
+    this.widthOverall = window.innerWidth * 0.6;
     this.heightOverall = window.innerHeight * 0.3;
     this.margin = { top: 20, bottom: 50, left: 60, right: 40 };
   }
@@ -27,17 +27,20 @@ class Calendar {
     const yearParser = d3.timeParse("%Y");
     const numToInclude = 10;
 
-    let data = state.caldata;
+    let data1 = state.caldata;
 
-    console.log("data", data);
+    console.log("data", data1);
 
-    let wrapper = data.map(function (years) {
+    // const sumTotal = 0;
+
+    let wrapper = data1.map(function (years) {
       return {
         year: years.key,
         dates: years.values
           .map(function (date) {
             return {
               date: parser(date.key),
+              // total: ,
               reps: date.values.map(function (rep) {
                 return {
                   rep: rep.key,
@@ -54,9 +57,42 @@ class Calendar {
           .sort((a, b) => d3.ascending(a.date, b.date)),
       };
     });
-    console.log("wrapper", wrapper);
 
     wrapper[0].dates.splice([86], 1);
+
+    // let color = function () {
+    //   const max = d3.quantile(
+    //     wrapper.map((d) => Math.abs(d.value)).sort(d3.ascending),
+    //     0.9975
+    //   );
+    //   return d3.scaleSequential(d3.interpolatePiYG).domain([-max, +max]);
+    // };
+
+    //the below isn't perfect, but gets the job done re: getting a sum total value
+
+    wrapper = d3.hierarchy(wrapper);
+
+    wrapper.data.forEach((year) =>
+      year.dates.forEach((date) => {
+        let sumTotal = 0;
+        (date.reps || []).forEach((rep) => {
+          (rep.purposes || []).forEach((purpose) => {
+            if (!purpose) return;
+            sumTotal += purpose.value[0].AMOUNT;
+          });
+        });
+        Object.assign(date, { total: sumTotal });
+      })
+    );
+
+    console.log("wrapper", wrapper);
+
+    let scale = d3
+      .scaleLinear()
+      .domain(d3.extent(wrapper, (d) => d.value))
+      .range([0.25, 1]);
+
+    let color = d3.scaleSequential((d) => d3.interpolateGreens(scale(d)));
 
     //pathMonth function -- does the work of creating each month.
 
@@ -89,7 +125,10 @@ class Calendar {
       .selectAll("g")
       .data(wrapper)
       .join("g")
-      .attr("transform", (d, i) => `translate(0, ${height * i})`);
+      .attr(
+        "transform",
+        (d, i) => `translate(45, ${height * i + cellSize * 1.5})`
+      );
 
     year
       .append("text")
@@ -97,7 +136,7 @@ class Calendar {
       .attr("y", -5)
       .attr("font-weight", "bold")
       .attr("text-anchor", "end")
-      .text((d) => d);
+      .text((d) => d.year);
 
     year
       .append("g")
@@ -125,7 +164,7 @@ class Calendar {
       )
       .attr("y", (d) => countDay(d.date) * cellSize + 0.5)
       .attr("stroke", "white")
-      .attr("fill", "red")
+      .attr("fill", (d) => color((d) => d.total)) //the color scale here is dependent on the value
       .attr("padding", "5px")
       .append("title")
       .text(

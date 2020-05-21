@@ -48,6 +48,8 @@ class HBarchart {
       })
       .slice(0, 10);
 
+    //rep equating should be set up around here
+
     //SCALES
     const yScale = d3
       .scaleBand()
@@ -80,7 +82,8 @@ class HBarchart {
       .attr("x", xScale(0))
       .attr("height", yScale.bandwidth())
       .attr("width", (d) => xScale(d.value) - xScale(0))
-      .attr("fill", "green");
+      .attr("fill", "green")
+      .on("mouseover", (d) => {});
 
     const text = svg
       .selectAll("text")
