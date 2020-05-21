@@ -6,6 +6,12 @@ class Sunburst {
 
     const container = d3.select("#sunburst").style("position", "relative");
 
+    const bucket = d3
+      .select("#sunburst")
+      .append("div")
+      .attr("id", "tooltip")
+      .attr("style", "position: absolute; opacity:0; z-index: 9999");
+
     this.svg = container
       .append("svg")
       .attr("width", this.width / 2)
@@ -80,8 +86,9 @@ class Sunburst {
 
     let scale = d3
       .scaleLinear()
-      .domain(d3.extent(subset, (d) => d.value))
-      .range(["#0fcf9a", "#0a8664"]);
+      .domain(d3.extent(subset.slice(1, 10), (d) => d.value))
+      .range(["#2b807a", "#5cc3a5"]);
+    // .range(["#0fcf9a", "#0a8664"]);
 
     // let colorOuter = d3.scaleOrdinal(
     //   d3.quantize(d3.interpolateSpectral(scale(d)))
@@ -111,7 +118,8 @@ class Sunburst {
         if (d.height == 2) {
           //this is the representative's travel spending level
           // return "green";
-          return colorInner(d.value);
+          // return colorInner(d.value);
+          return scale(d.value);
           // color(Math.max((d) => d3.sum(d, (d) => d.value)));
         } else if (d.height == 1) {
           //this is the purpose level
@@ -131,13 +139,20 @@ class Sunburst {
           // return opacityScale(d.value);
           return 0.6;
         } else {
-          return 1;
+          return 0.7;
         }
       })
       .attr("d", arc)
       .append("title")
       .text((d) => d.data[0])
-      .on("mouseover", (d) => d);
+      .on("mouseover", (d) =>
+        d3
+          .select("#tooltip")
+          .transition()
+          .duration(350)
+          .style("opacity", 1)
+          .text((d) => d.data[0])
+      );
 
     //keep everything below in the draw function; move everything above to the constructor
 
