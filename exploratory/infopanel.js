@@ -7,15 +7,11 @@ class InfoPanel {
 
     //MAIN REP FILTER
     const filteredReps = state.reps.find((d) => state.rep == d.bioguide_id);
-    console.log(filteredReps);
 
     //WORKING FILTERS
     const yearFinder = Array.from(new Set(state.spending.map((d) => d.YEAR)));
     const categorySelection = Array.from(
       new Set(state.spending.map((d) => d.CATEGORY))
-    );
-    const repSelection = Array.from(
-      new Set(state.reps.map((d) => d.last_name))
     );
 
     //FILLING THE FILTERS
@@ -59,7 +55,7 @@ class InfoPanel {
         if (state.rep) {
           this.container
             .html(
-              `<div>Hon. ${filteredReps.full_name} | ${filteredReps.party}</div><br>
+              `<div>Hon. ${filteredReps.full_name} | ${filteredReps.party} | ${filteredReps.full_state} District ${filteredReps.district}</div><br>
                 <div><i class="fab fa-facebook-f"></i> ${filteredReps.facebook}</div>
                 <div><i class="fab fa-twitter"></i> @${filteredReps.twitter}</div>
                 <div><a href="https://youtube.com/${filteredReps.youtube_id}"><i class="fab fa-youtube"></i> YouTube</a></div>

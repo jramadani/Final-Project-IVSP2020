@@ -31,3 +31,10 @@ h1 {
 .sunburstControls:hover {
   fill-opacity: 0.9;
 }
+#hbc {
+  padding-top: 70px;
+}
+
+.bars:hover {
+  opacity: 0.8;
+}

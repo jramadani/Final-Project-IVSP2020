@@ -13,8 +13,6 @@ class Donut {
         this.width,
         this.height,
       ]);
-    // .attr("width", this.width)
-    // .attr("height", this.width);
   }
 
   draw(state, setGlobal) {
@@ -25,7 +23,6 @@ class Donut {
     let filteredSpending = state.spending.filter(
       (d) => state.rep == d.BIOGUIDE_ID
     );
-    console.log(filteredSpending);
 
     let donutData = d3
       .nest()

@@ -111,6 +111,13 @@ path {
   shape-rendering: geometricPrecision;
 }
 
+.tooltip {
+  margin: 30px;
+}
+#granular {
+  font-size: 16px;
+}
+
 .republican {
   color: #492b26;
 }

@@ -13,6 +13,8 @@ let state = {
   geoid: null,
   rep: null,
   hover: null,
+  hoverep: null,
+  hovergeoid: null,
   selectedYear: null,
   selectedCategory: null,
   yearFiltered: [],

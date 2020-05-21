@@ -81,7 +81,7 @@ class Sunburst {
     let scale = d3
       .scaleLinear()
       .domain(d3.extent(subset, (d) => d.value))
-      .range([0, 1]);
+      .range([0.5, 1]);
 
     // let colorOuter = d3.scaleOrdinal(
     //   d3.quantize(d3.interpolateSpectral(scale(d)))

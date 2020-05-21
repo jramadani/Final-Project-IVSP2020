@@ -12,6 +12,7 @@ class Calendar {
     let formatMonth = d3.utcFormat("%b");
     let formatDay = (d) => "SMTWTFS"[d.getUTCDay()];
     let formatDate = d3.utcFormat("%x");
+    let format = d3.format(",d");
 
     //these functions create the format for the datetime
 
@@ -60,19 +61,9 @@ class Calendar {
 
     wrapper[0].dates.splice([86], 1);
 
-    // let color = function () {
-    //   const max = d3.quantile(
-    //     wrapper.map((d) => Math.abs(d.value)).sort(d3.ascending),
-    //     0.9975
-    //   );
-    //   return d3.scaleSequential(d3.interpolatePiYG).domain([-max, +max]);
-    // };
-
     //the below isn't perfect, but gets the job done re: getting a sum total value
 
-    wrapper = d3.hierarchy(wrapper);
-
-    wrapper.data.forEach((year) =>
+    wrapper.forEach((year) =>
       year.dates.forEach((date) => {
         let sumTotal = 0;
         (date.reps || []).forEach((rep) => {
@@ -87,12 +78,12 @@ class Calendar {
 
     console.log("wrapper", wrapper);
 
-    let scale = d3
-      .scaleLinear()
-      .domain(d3.extent(wrapper, (d) => d.value))
-      .range([0.25, 1]);
+    //color test
 
-    let color = d3.scaleSequential((d) => d3.interpolateGreens(scale(d)));
+    let color = d3
+      .scaleSequential()
+      .domain([0, 500000])
+      .interpolator(d3.interpolateGreens);
 
     //pathMonth function -- does the work of creating each month.
 
@@ -117,7 +108,7 @@ class Calendar {
       .append("svg")
       .attr("class", "calendarsvg")
       .attr("width", this.widthOverall)
-      .attr("height", this.heightOverall * 3)
+      .attr("height", this.heightOverall * 2)
       .attr("font-family", "sans-serif")
       .attr("font-size", 10);
 
@@ -164,39 +155,58 @@ class Calendar {
       )
       .attr("y", (d) => countDay(d.date) * cellSize + 0.5)
       .attr("stroke", "white")
-      .attr("fill", (d) => color((d) => d.total)) //the color scale here is dependent on the value
+      .attr(
+        "fill",
+        //static color
+        // "green"
+
+        // dynamic color test
+        // (d) => {
+
+        (d) => color((d) => d.total)
+        // }
+      ) //the color scale here is dependent on the value
       .attr("padding", "5px")
       .append("title")
       .text(
-        (d) => `${formatDate(d.date)}
-        `
+        (d) =>
+          `${formatDate(d.date)} | ${format(
+            Number(Math.round(d.total + "e2") + "e-2")
+          )}`
       );
 
-    // const month = year
-    //   .append("g")
-    //   .attr("class", "months")
-    //   .selectAll("g")
-    //   .data(([, dates]) =>
-    //     d3.utcMonths(d3.utcMonth(dates[0].date), dates[dates.length - 1].date)
-    //   )
-    //   .join("g");
+    const month = year
+      .append("g")
+      .attr("class", "months")
+      .selectAll("g")
+      .data((d) =>
+        d3.utcMonths(
+          d3.utcMonth(d.dates.date),
+          d.dates[d.dates.length - 1].date
+        )
+      )
+      .join("g");
 
-    // month
-    //   .filter((d, i) => i)
-    //   .append("path")
-    //   .attr("fill", "none")
-    //   .attr("stroke", "#fff")
-    //   .attr("stroke-width", 3)
-    //   .attr("d", pathMonth);
+    console.log("month", month);
 
-    // month
-    //   .append("text")
-    //   .attr(
-    //     "x",
-    //     (d) => timeWeek.count(d3.utcYear(d), timeWeek.ceil(d)) * cellSize + 2
-    //   )
-    //   .attr("y", -5)
-    //   .text(formatMonth);
+    month
+      .filter((d, i) => i)
+      .append("path")
+      .attr("fill", "none")
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 3)
+      .attr("d", pathMonth);
+
+    console.log("month again", month);
+
+    month
+      .append("text")
+      .attr(
+        "x",
+        (d) => timeWeek.count(d3.utcYear(d), timeWeek.ceil(d)) * cellSize + 2
+      )
+      .attr("y", -5)
+      .text(formatMonth);
   }
 }
 export { Calendar };

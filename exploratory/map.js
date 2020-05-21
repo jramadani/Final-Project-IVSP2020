@@ -4,12 +4,10 @@ class Map {
     this.height = window.innerHeight * 0.6;
     this.margin = { top: 20, bottom: 50, left: 60, right: 40 };
 
-    let tooltip;
-
-    tooltip = d3
-      .select("#hover-content")
+    this.tooltip = d3
+      .select("#summarystats")
       .attr("class", "tooltip")
-      .style("position", "sticky");
+      .style("position", "relative");
 
     this.svg = d3
       .select("#map")
@@ -31,10 +29,6 @@ class Map {
       .attr("class", "district")
       .attr("fill", "transparent")
       .attr("stroke", "black")
-      // .on("mouseover", d => {
-      //   state.hover = { geoid: d.properties.GEOID };
-      //   console.log("geoid", state.hover.geoid);
-      // })
       .on("click", (district) => {
         const geoid = district.properties.GEOID;
         const rep = state.reps.find((rep) => rep.geoid == geoid);
@@ -46,37 +40,44 @@ class Map {
       .call(
         d3.zoom().on("zoom", (d) => {
           this.svg.selectAll("path").attr("transform", d3.event.transform);
+          tooltip.attr("display", "none");
         })
       );
-
-    // .on("mouseover", d => {
-    //   state.hover = {
-    //     translate: [d.x, d.y]
-    //   };
-    // });
   }
 
   draw(state, setGlobal) {
     console.log("map time!!");
 
-    //tooltip
-    // if (state.hover) {
-    //   tooltip
-    //     .html(
-    //       `<div>Total amount spent on ${selectedCategory}: $placeholder </div>`
-    //     )
-    //     .transition()
-    //     .duration(500)
-    //     .style("background-color", "white")
-    //     .style("color", "#A50026")
-    //     .style("border-radius", "15px")
-    //     .style("padding", "15px")
-    //     .style("opacity", 0.85)
-    //     .style(
-    //       "transform",
-    //       `translate(${state.hover.translate[0]}px, ${state.hover.translate[1]}px)`
-    //     );
-    // }
+    this.svg
+      .selectAll(".district")
+      .data(state.districts.features)
+      .on("mouseover", (d) => {
+        const hovergeoid = d.properties.GEOID;
+        const hoverep = state.reps.find(
+          (hoverep) => hoverep.geoid == hovergeoid
+        );
+        setGlobal({
+          hovergeoid: hovergeoid,
+          hoverep: hoverep.bioguide_id,
+        });
+
+        const filteredSpending = state.spending.filter(
+          (d) => state.hoverep == d.BIOGUIDE_ID
+        );
+        const format = d3.format(",d");
+
+        state.hover = { total: d3.sum(filteredSpending, (d) => d.AMOUNT) };
+        if (state.hover) {
+          this.tooltip.html(
+            `<div>Hon. ${hoverep.full_name} <br> ${hoverep.party} <br> ${
+              hoverep.full_state
+            } District ${hoverep.district}</div><br>
+          <div>Total amount spent: <span id="granular">${format(
+            Number(Math.round(state.hover.total + "e2") + "e-2")
+          )} </span></div>`
+          );
+        }
+      });
   }
 }
 

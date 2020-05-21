@@ -1,8 +1,8 @@
 class HBarchart {
   constructor(state, setGlobalState) {
     this.width = window.innerWidth * 0.8;
-    this.height = window.innerHeight * 0.6;
-    this.margin = { top: 20, bottom: 50, left: 200, right: 200 };
+    this.height = window.innerHeight * 0.4;
+    this.margin = { top: 70, bottom: 50, left: 200, right: 200 };
   }
 
   draw(state, setGlobalState) {
@@ -17,6 +17,7 @@ class HBarchart {
     const yearFormatter = d3.timeFormat("%Y");
     const yearParser = d3.timeParse("%Y");
     const numToInclude = 10;
+    const format = d3.format(",d");
 
     let newData = data.map((d) => ({
       ...d,
@@ -47,8 +48,12 @@ class HBarchart {
         return d3.descending(+a.value, +b.value);
       })
       .slice(0, 10);
+    console.log("topData", topData);
 
     //rep equating should be set up around here
+
+    const filteredReps = state.reps.filter((d) => topData.key == d.bioguide_id);
+    console.log("filteredReps", filteredReps);
 
     //SCALES
     const yScale = d3
@@ -78,6 +83,7 @@ class HBarchart {
       .selectAll("rect")
       .data(topData)
       .join("rect")
+      .attr("class", "bars")
       .attr("y", (d) => yScale(d.key))
       .attr("x", xScale(0))
       .attr("height", yScale.bandwidth())
@@ -92,7 +98,7 @@ class HBarchart {
       .attr("class", "label")
       .attr("y", (d) => yScale(d.key) + yScale.bandwidth() / 2)
       .attr("x", xScale(75))
-      .text((d) => d.value)
+      .text((d) => "$" + format(Number(Math.round(d.value + "e2") + "e-2")))
       .attr("dy", "5")
       .attr("dx", "2em")
       .attr("fill", "white")
@@ -101,13 +107,13 @@ class HBarchart {
     svg
       .append("g")
       .attr("class", "axis")
-      .attr("transform", `translate(0, 275)`)
+      .attr("transform", `translate(0, 230)`)
       .call(xAxis)
       .selectAll("text")
       .attr("y", 0)
       .attr("x", 9)
       .attr("dy", ".35em")
-      .attr("transform", "rotate(-45)")
+      .attr("transform", `translate(0, 15)`)
       .style("text-anchor", "end");
 
     svg

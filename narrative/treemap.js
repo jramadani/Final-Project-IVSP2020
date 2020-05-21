@@ -8,7 +8,7 @@ class Treemap {
 
     this.svg = container
       .append("svg")
-      .attr("width", this.width)
+      .attr("width", this.width * 1.5)
       .attr("height", this.height);
   }
 
@@ -66,7 +66,7 @@ class Treemap {
 
     let tree = d3
       .treemap()
-      .size([this.width, this.height])
+      .size([this.width * 1.5, this.height])
       .padding(1)
       .round(true);
 
