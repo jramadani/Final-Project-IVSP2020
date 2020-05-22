@@ -1,6 +1,11 @@
 body {
   font-family: "Roboto 300", sans-serif;
-  margin-left: 50px;
+}
+
+img {
+  width: 100%;
+  position: absolute;
+  z-index: -1;
 }
 
 a {
@@ -13,9 +18,15 @@ h1 {
   font-size: 61px;
 }
 
-.container {
+#heading {
+  margin: 50px;
+}
+
+#container {
   display: grid;
   place-items: center;
+  margin-left: 100px;
+  margin-right: 100px;
 }
 
 .label {
@@ -29,7 +40,7 @@ h1 {
 }
 
 .sunburstControls:hover {
-  fill-opacity: 0.9;
+  fill-opacity: 0.4;
 }
 #hbc {
   padding-top: 70px;
@@ -37,4 +48,9 @@ h1 {
 
 .bars:hover {
   opacity: 0.8;
+}
+
+#narrativestyle {
+  font-size: 24px;
+  padding-bottom: 15px;
 }

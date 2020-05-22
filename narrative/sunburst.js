@@ -6,12 +6,6 @@ class Sunburst {
 
     const container = d3.select("#sunburst").style("position", "relative");
 
-    const bucket = d3
-      .select("#sunburst")
-      .append("div")
-      .attr("id", "tooltip")
-      .attr("style", "position: absolute; opacity:0; z-index: 9999");
-
     this.svg = container
       .append("svg")
       .attr("width", this.width / 2)
@@ -29,6 +23,8 @@ class Sunburst {
     const yearFormatter = d3.timeFormat("%Y");
     const yearParser = d3.timeParse("%Y");
     const numToInclude = 10;
+
+    // DATA AGGREGATION AND MANIPULATION
 
     let newData = data.map((d) => ({
       ...d,
@@ -68,6 +64,8 @@ class Sunburst {
       (d) => d["PURPOSE"]
     );
 
+    // HIERARCHY
+
     let hierarchy = d3
       .hierarchy([null, grouped], (d) => d[1])
       .sum((d) => d["AMOUNT"]);
@@ -84,19 +82,17 @@ class Sunburst {
     let subset = root.descendants().filter((d) => d.depth < 3);
     console.log("subset", subset);
 
+    //COLOR CONSTRUCTOR
+
     let scale = d3
       .scaleLinear()
       .domain(d3.extent(subset.slice(1, 10), (d) => d.value))
-      .range(["#2b807a", "#5cc3a5"]);
-    // .range(["#0fcf9a", "#0a8664"]);
+      .range(["#8bd086", "#3dad65"]);
 
-    // let colorOuter = d3.scaleOrdinal(
-    //   d3.quantize(d3.interpolateSpectral(scale(d)))
-    // );
-    let colorOuter = d3.scaleOrdinal(d3.quantize(d3.interpolateViridis, 8));
+    let colorOuter = d3.scaleOrdinal(d3.quantize(d3.interpolateYlGn, 8));
     let colorInner = d3.scaleSequential((d) => scale(d));
 
-    //d3.scaleSequential((d) => d3.interpolateGreens(scale(d)));
+    //ARC CONSTRUCTION
 
     let arc = d3
       .arc()
@@ -106,6 +102,8 @@ class Sunburst {
       .padRadius(radius / 2)
       .innerRadius((d) => d.y0 / 2)
       .outerRadius((d) => (d.y1 - 1) / 2);
+
+    //SUNBURST DRAW
 
     this.svg
       .append("g")
@@ -117,15 +115,10 @@ class Sunburst {
       .attr("fill", (d) => {
         if (d.height == 2) {
           //this is the representative's travel spending level
-          // return "green";
-          // return colorInner(d.value);
           return scale(d.value);
-          // color(Math.max((d) => d3.sum(d, (d) => d.value)));
         } else if (d.height == 1) {
           //this is the purpose level
-          return colorOuter(d.data[0]);
-          // return "pink";
-          // color(Math.max((d) => d3.sum(d, (d) => d.value))); //a certain color map based on value, remember to set opacity level at less than 1
+          return colorOuter(d.data[0]); //a certain color map based on value, remember to set opacity level at less than 1
         } else {
           return "transparent";
         }
@@ -137,9 +130,9 @@ class Sunburst {
           //   .domain([d3.extent(d, (d) => d.value)])
           //   .range([0.3, 0.8]);
           // return opacityScale(d.value);
-          return 0.6;
+          return 0.8;
         } else {
-          return 0.7;
+          return 0.9;
         }
       })
       .attr("d", arc)
@@ -147,7 +140,7 @@ class Sunburst {
       .text((d) => d.data[0])
       .on("mouseover", (d) =>
         d3
-          .select("#tooltip")
+          .select("#sunbursttooltip")
           .transition()
           .duration(350)
           .style("opacity", 1)

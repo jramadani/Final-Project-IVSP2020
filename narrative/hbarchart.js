@@ -50,11 +50,6 @@ class HBarchart {
       .slice(0, 10);
     console.log("topData", topData);
 
-    //rep equating should be set up around here
-
-    const filteredReps = state.reps.filter((d) => topData.key == d.bioguide_id);
-    console.log("filteredReps", filteredReps);
-
     //SCALES
     const yScale = d3
       .scaleBand()

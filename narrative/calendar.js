@@ -78,7 +78,7 @@ class Calendar {
 
     console.log("wrapper", wrapper);
 
-    //color test
+    //color
 
     let color = d3
       .scaleSequential()
@@ -155,17 +155,7 @@ class Calendar {
       )
       .attr("y", (d) => countDay(d.date) * cellSize + 0.5)
       .attr("stroke", "white")
-      .attr(
-        "fill",
-        //static color
-        // "green"
-
-        // dynamic color test
-        // (d) => {
-
-        (d) => color((d) => d.total)
-        // }
-      ) //the color scale here is dependent on the value
+      .attr("fill", (d) => color(d.total))
       .attr("padding", "5px")
       .append("title")
       .text(
@@ -173,7 +163,10 @@ class Calendar {
           `${formatDate(d.date)} | ${format(
             Number(Math.round(d.total + "e2") + "e-2")
           )}`
-      );
+      )
+      .on("mouseover", (d) => {
+        console.log("registering hover");
+      });
 
     const month = year
       .append("g")

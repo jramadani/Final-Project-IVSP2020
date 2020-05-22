@@ -13,6 +13,9 @@ let state = {
   spending: [],
   selectedRep: null,
   selectedPurpose: null,
+  hoverHBC: null,
+  hoverSunburst: null,
+  hoverCal: null,
 };
 
 //LOAD DATA

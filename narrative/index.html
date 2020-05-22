@@ -7,39 +7,43 @@
 <!-- Representative info from https://github.com/unitedstates/congress-legislators -->
   </head>
   <body>
-    <h1>Legislation on the Move</h1>
+  <div id="heading"><h1>Legislation on the Move</h1>
+
     <p style="font-size: 36px;">Our representatives are spending a large proportion of their budget on travel.</h2>
     <p class="expl">Data from <a href="https://projects.propublica.org/represent/expenditures">ProPublica</a></p></div>
-    <div class="container">
-      <div><p style="font-size: 24px; padding-bottom: 15px;">
+  </div>
+    <div id="container">
+      <div><p id="narrativestyle">
         Of the categories on which representatives spend their budgets, personnel compensation and travel are the top two overall. <br><br>
         When taking into account that each representative has a certain amount of staffers and contractors, each paid a large amount yearly,
         the next most interesting category becomes travel. <br>
       </p></div>
       <div></div>
       <div id="treemap"></div>
-      <div><p style="font-size: 24px; padding-bottom: 15px;">
-        So what are our representatives spending all that travel money on? <br> <br>
+      <div><p id="narrativestyle"><br>
         The top 10 travel spenders are largely from red states, but surprisingly, a fair amount of Democrats are also big travel spenders.
         <br> <br> This mostly comes down to location.
       </p></div>
+      <div id="hbctooltip"></div>
       <div id="hbc"></div>
-      <div><p style="font-size: 24px; padding-bottom: 15px;">You might be wondering, though: what exactly are these representatives spending all that money on? 
-        The top answer is gas mileage reimbursement, which makes sense given that many of the top spenders are from large states like Texas.
+      <div><p id="narrativestyle">You might be wondering, though: what exactly are these representatives spending all that travel money on? 
+        <br><br>The top answer is gas mileage reimbursement, which makes sense given that many of the top spenders are from large states like Texas.
       But then there are expenditures like meals and hotels. </div>
+      <div id="suntooltip"></div>
       <div id="sunburst"></div>
-      <div><p style="font-size: 24px; padding-bottom: 15px;">
+      <div><p id="narrativestyle">
       You could make the argument that if being a member of Congress is like being hired at a company, then representatives should have access to funds needed in order to do their jobs, but for the most part, oversight is limited. 
       We the people, as voting HR, don't actually have the ability to fire our representatives.</p></div>
-      <div><p style="font-size: 24px; padding-bottom: 15px;">But looking at it further, there's a time for traveling, too: our representatives aren't just traveling to connect with their constituents. 
+      <div><p id="narrativestyle">But looking at it further, there's a time for traveling, too: in the last two years, our representatives have stopped spending as much in the first and second quarter of the year.
         </p></div>
+        <div id="caltooltip"></div>
       <div id="calendar"></div>
-      <div><p style="font-size: 24px; padding-bottom: 15px;">Our representatives are campaigning on tax funds, perpetuating the cycle of incumbency--in other words, it's way more likely they'll get voted into office again.<br>
-       <br> While this can be a good thing or a bad thing, depending on your perspective and how much you like your representative, one thing's for sure: it's not really fair.</p></div>
-      <div><p style="font-size: 24px; padding-bottom: 15px;">If you want to know more about how the 115th Congress spent their budget, 
-        <a href="">take a look at the Representative Spending dashboard.</a><br>
-      The official House website has a section on frequently asked questions about the data used in this project, <a href="https://www.house.gov/the-house-explained/open-government/statement-of-disbursements/frequently-asked-questions">which can be found here</a>.
-    <br>
+      <div><p id="narrativestyle">In 2018, there was a midterm election that completely changed the way the board was drawn; the House flipped from a majority Republican to a majority Democrat construction. <br>
+       <br>You can pretty clearly see that representatives spent a large chunk of that year campaigning; they're actually not allowed to use their budget for campaigning, which is why they usually have separate campaign funds. However, if representatives are spending such a huge portion of the year trying to figure out how to get re-elected,  when do they have time to do the job they were hired for?</p></div>
+      <div><p id="narrativestyle">If you want to know more about how the 115th Congress spent their budget, 
+        <a href="https://jramadani.github.io/Final-Project-IVSP2020/exploratory/index.html">take a look at the Representative Spending dashboard.</a><br>
+      <br>The official House website has a section on frequently asked questions about the data used in this project, <a href="https://www.house.gov/the-house-explained/open-government/statement-of-disbursements/frequently-asked-questions">which can be found here</a>.
+    <br><br>
     In addition, if you want to know more about how ProPublica sees the data, you can <a href="https://www.propublica.org/article/update-on-house-disbursements-a-few-notes-on-how-to-use-the-data">view their blog post here.</a>
     </p></div>
     </div>
