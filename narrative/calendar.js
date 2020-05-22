@@ -3,9 +3,7 @@ class Calendar {
     this.widthOverall = window.innerWidth * 0.6;
     this.heightOverall = window.innerHeight * 0.3;
     this.margin = { top: 20, bottom: 50, left: 60, right: 40 };
-  }
 
-  draw(state, setGlobalState) {
     let cellSize = 17;
     let width = 960;
     let height = 163;
@@ -29,8 +27,6 @@ class Calendar {
     const numToInclude = 10;
 
     let data1 = state.caldata;
-
-    console.log("data", data1);
 
     // const sumTotal = 0;
 
@@ -76,8 +72,6 @@ class Calendar {
       })
     );
 
-    console.log("wrapper", wrapper);
-
     //color
 
     let color = d3
@@ -100,7 +94,7 @@ class Calendar {
       }V${n * cellSize}`;
     }
 
-    //STRUCTURE FROM BOSTOCK FOR A START
+    //STRUCTURE FROM BOSTOCK FOR A START-- I intend to flip this on its axis
 
     const container = d3.select("#calendar").style("position", "relative");
 
@@ -147,6 +141,9 @@ class Calendar {
       .selectAll("rect")
       .data((d) => d.dates)
       .join("rect")
+      .on("mouseover", (d) => {
+        console.log("registering hover");
+      })
       .attr("width", cellSize - 1)
       .attr("height", cellSize - 1)
       .attr(
@@ -163,10 +160,7 @@ class Calendar {
           `${formatDate(d.date)} | ${format(
             Number(Math.round(d.total + "e2") + "e-2")
           )}`
-      )
-      .on("mouseover", (d) => {
-        console.log("registering hover");
-      });
+      );
 
     //month separation is not working right now; note to come back to it when able
 
@@ -182,8 +176,6 @@ class Calendar {
       )
       .join("g");
 
-    console.log("month", month);
-
     month
       .filter((d, i) => i)
       .append("path")
@@ -191,8 +183,6 @@ class Calendar {
       .attr("stroke", "#fff")
       .attr("stroke-width", 3)
       .attr("d", pathMonth);
-
-    console.log("month again", month);
 
     month
       .append("text")
@@ -202,6 +192,10 @@ class Calendar {
       )
       .attr("y", -5)
       .text(formatMonth);
+  }
+
+  draw(state, setGlobalState) {
+    //tooltip should go here
   }
 }
 export { Calendar };

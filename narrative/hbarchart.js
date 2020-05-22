@@ -50,6 +50,8 @@ class HBarchart {
       .slice(0, 10);
     console.log("topData", topData);
 
+    // will have to come back to replacing the axis labels--I get the feeling it's got something to do with the base data.
+
     //SCALES
     const yScale = d3
       .scaleBand()
@@ -84,13 +86,20 @@ class HBarchart {
       .attr("height", yScale.bandwidth())
       .attr("width", (d) => xScale(d.value) - xScale(0))
       .attr("fill", "green")
-      .on("mouseover", (d) => {});
+      .on("mouseover", (d) => {
+        console.log("registering hover");
+      });
 
     const text = svg
       .selectAll("text")
       .data(topData)
       .join("text")
       .attr("class", "label")
+      // .select(".label")
+      // .text((d) => {
+      //   if (state.reps.find((d) => topData.key == d.bioguide_id))
+      //     return d.full_name;
+      // })
       .attr("y", (d) => yScale(d.key) + yScale.bandwidth() / 2)
       .attr("x", xScale(75))
       .text((d) => "$" + format(Number(Math.round(d.value + "e2") + "e-2")))

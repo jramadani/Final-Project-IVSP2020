@@ -46,8 +46,6 @@ class Treemap {
       .rollup((d) => d3.sum(d, (d) => d.AMOUNT))
       .entries(filteredData);
 
-    console.log("nestedData", nestedData);
-
     let scale = d3
       .scaleLinear()
       .domain(d3.extent(nestedData, (d) => d.value))
@@ -62,7 +60,6 @@ class Treemap {
       .hierarchy(wrapper)
       .sum((d) => d.value)
       .sort((a, b) => b.value - a.value);
-    console.log("root", root);
 
     let tree = d3
       .treemap()

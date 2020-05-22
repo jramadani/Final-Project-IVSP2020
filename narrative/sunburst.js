@@ -4,20 +4,21 @@ class Sunburst {
     this.height = window.innerHeight * 0.8;
     this.margin = { top: 100, bottom: 50, left: 100, right: 40 };
 
-    const container = d3.select("#sunburst").style("position", "relative");
+    const container = d3.select("#sunburst");
 
     this.svg = container
       .append("svg")
       .attr("width", this.width / 2)
       .attr("height", this.width / 2);
 
+    //tooltip is currently not working for some reason-come back to this
+
     this.tooltip = container
       .append("div")
       .attr("class", "suntooltip")
-      .style("position", "relative");
-  }
+      .style("position", "relative")
+      .attr("z-index", 99999);
 
-  draw(state, setGlobalState) {
     let data = state.spending.filter((d) => d.CATEGORY == "TRAVEL");
 
     //OFFICE HOURS APPROACH:
@@ -85,7 +86,6 @@ class Sunburst {
     let root = partition(topSpenders);
 
     let subset = root.descendants().filter((d) => d.depth < 3);
-    console.log("subset", subset);
 
     //COLOR CONSTRUCTOR
 
@@ -117,6 +117,14 @@ class Sunburst {
       .join("path")
       .attr("class", "sunburstControls")
       .attr("transform", `translate(${radius / 2}, ${radius / 2})`)
+      .on("mouseover", (d) => {
+        console.log("hello");
+        state.hoverSunburst = setGlobalState({
+          translate: [d.x0, d.y0],
+          name: d.data[0],
+          value: d.value,
+        });
+      })
       .attr("fill", (d) => {
         if (d.height == 2) {
           //this is the representative's travel spending level
@@ -142,35 +150,30 @@ class Sunburst {
       })
       .attr("d", arc)
       .append("title")
-      .text((d) => d.data[0])
-      .on("mouseover", (d) => {
-        state.hoverSunburst = setGlobalState({
-          translate: [d.x, d.y],
-          name: d.data[0],
-          value: d.value,
-        });
-        console.log("hovery", state.hoverSunburst);
-      });
+      .text((d) => d.data[0]);
+  }
 
+  draw(state, setGlobalState) {
     if (state.hoverSunburst) {
-      tooltip
+      this.tooltip
         .html(
           `<div>Name: ${state.hoverSunburst.name}</div>
-          <div>Value: ${state.hover.value}</div>`
+          <div>Value: ${state.hoverSunburst.value}</div>`
         )
         .transition()
         .duration(500)
-        .style("background-color", "white")
+        .style("background-color", "black")
         .style("color", "#A50026")
         .style("border-radius", "15px")
         .style("padding", "15px")
         .style("opacity", 0.85)
+        .style("z-index", 9999999)
         .style(
           "transform",
-          `translate(${state.hover.translate[0]}px, ${state.hover.translate[1]}px)`
+          `translate(${state.translate[0]}px, ${state.translate[1]}px)`
         );
 
-      //keep everything below in the draw function; move everything above to the constructor
+      //labels--deprecated, kept for reference
 
       // this.svg
       //   .append("g")
