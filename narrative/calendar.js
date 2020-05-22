@@ -168,6 +168,8 @@ class Calendar {
         console.log("registering hover");
       });
 
+    //month separation is not working right now; note to come back to it when able
+
     const month = year
       .append("g")
       .attr("class", "months")

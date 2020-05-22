@@ -10,6 +10,11 @@ class Sunburst {
       .append("svg")
       .attr("width", this.width / 2)
       .attr("height", this.width / 2);
+
+    this.tooltip = container
+      .append("div")
+      .attr("class", "suntooltip")
+      .style("position", "relative");
   }
 
   draw(state, setGlobalState) {
@@ -138,40 +143,59 @@ class Sunburst {
       .attr("d", arc)
       .append("title")
       .text((d) => d.data[0])
-      .on("mouseover", (d) =>
-        d3
-          .select("#sunbursttooltip")
-          .transition()
-          .duration(350)
-          .style("opacity", 1)
-          .text((d) => d.data[0])
-      );
+      .on("mouseover", (d) => {
+        state.hoverSunburst = setGlobalState({
+          translate: [d.x, d.y],
+          name: d.data[0],
+          value: d.value,
+        });
+        console.log("hovery", state.hoverSunburst);
+      });
 
-    //keep everything below in the draw function; move everything above to the constructor
+    if (state.hoverSunburst) {
+      tooltip
+        .html(
+          `<div>Name: ${state.hoverSunburst.name}</div>
+          <div>Value: ${state.hover.value}</div>`
+        )
+        .transition()
+        .duration(500)
+        .style("background-color", "white")
+        .style("color", "#A50026")
+        .style("border-radius", "15px")
+        .style("padding", "15px")
+        .style("opacity", 0.85)
+        .style(
+          "transform",
+          `translate(${state.hover.translate[0]}px, ${state.hover.translate[1]}px)`
+        );
 
-    // this.svg
-    //   .append("g")
-    //   .attr("pointer-events", "none")
-    //   .attr("text-anchor", "middle")
-    //   .attr("font-size", 10)
-    //   .attr("font-family", "sans-serif")
-    //   .selectAll("text")
-    //   .data(
-    //     root.descendants().filter((d) => d.depth < 3)
-    //   )
-    //   .join("text")
-    //   .attr("transform", function (d) {
-    //     const x = (((d.x0 + d.x1) / 2) * 180) / Math.PI;
-    //     const y = (d.y0 + d.y1) / 2;
-    //     return `rotate(${
-    //       x - 90
-    //     }) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
-    //   })
-    //   .attr("color", "black")
-    //   .attr("dy", "0.35em")
-    //   .text((d) => d.data[0])
-    //   .attr("z-index", "9999");
-    //remember to set the title's z-index to 9999 to make sure it shows up on top of everything else.
+      //keep everything below in the draw function; move everything above to the constructor
+
+      // this.svg
+      //   .append("g")
+      //   .attr("pointer-events", "none")
+      //   .attr("text-anchor", "middle")
+      //   .attr("font-size", 10)
+      //   .attr("font-family", "sans-serif")
+      //   .selectAll("text")
+      //   .data(
+      //     root.descendants().filter((d) => d.depth < 3)
+      //   )
+      //   .join("text")
+      //   .attr("transform", function (d) {
+      //     const x = (((d.x0 + d.x1) / 2) * 180) / Math.PI;
+      //     const y = (d.y0 + d.y1) / 2;
+      //     return `rotate(${
+      //       x - 90
+      //     }) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
+      //   })
+      //   .attr("color", "black")
+      //   .attr("dy", "0.35em")
+      //   .text((d) => d.data[0])
+      //   .attr("z-index", "9999");
+      //remember to set the title's z-index to 9999 to make sure it shows up on top of everything else.
+    }
   }
 }
 export { Sunburst };
