@@ -1,5 +1,9 @@
 body {
   font-family: "Roboto 300", sans-serif;
+  border: 2px;
+  border-style: dashed double;
+  border-color: green;
+  border-radius: 5px;
 }
 
 img {
