@@ -10,4 +10,4 @@ The first project, found in its eponymous folder, is an exploratory visualizatio
 
 The second, also found in its eponymous folder, is a narrative visualization, narrowing the focus of the first, in which we unpack that same dataset's travel subcategory. [The deployed narrative visualization can be found here.](https://jramadani.github.io/Final-Project-IVSP2020/narrative/index.html)
 
-#### Thank you for your interest in this project!
+#### Though the semester is over, this project continues to be a work in progress, and I will be iterating on it more in the coming weeks. Thank you for your interest!
