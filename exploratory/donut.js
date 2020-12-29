@@ -7,6 +7,7 @@ class Donut {
     this.svg = d3
       .select("#donut")
       .append("svg")
+      .attr("class", "donut-controls")
       .attr("viewBox", [
         -this.width / 2,
         -this.height / 1.75,
@@ -76,10 +77,12 @@ class Donut {
             .text((d) => `${d.data.key}: ${d.data.value}`),
         (update) => update,
         (exit) => exit.remove()
-      );
+      )
+      .call((selection) => selection.selectAll("path").remove());
     // .call(
     //   (selection) =>
     //     selection
+
     //       .transition()
     //       .duration(1000)
     //       .attr("opacity", 1)
@@ -109,7 +112,8 @@ class Donut {
             ),
         (update) => update,
         (exit) => exit.remove()
-      );
+      )
+      .call((g) => g.selectAll("text").remove());
   }
 }
 export { Donut };
